@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+env/
+
+# Django
+staticfiles/
+media/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# SQLite database
+*.sqlite3
+db.sqlite3
+
+# Node.js
+node_modules/
+frontend/node_modules/
+frontend/dist/
+
+# VS Code
+.vscode/
+
+# Django database and generated files
+*.sqlite3
+staticfiles/
+media/
+
+# React
+node_modules/
+dist/

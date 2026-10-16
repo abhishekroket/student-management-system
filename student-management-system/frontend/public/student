@@ -1,0 +1,7 @@
+function App() {
+  return (
+    <div>
+      <img src="https://www.euroschoolindia.com/blogs/wp-content/uploads/2025/11/How-Does-the-Student-Management-System-Help-with-Multiple-Tasks.jpg" alt="Bright, upbeat illustration of an online certification displayed on a computer monitor, with a checklist, books, a clock, a graduation cap, and a certificate on a desk against a blue background. The monitor reads ONLINE CERTIFICATION, and the certificate reads CERTIFICATE." />
+    </div>
+  );
+}
