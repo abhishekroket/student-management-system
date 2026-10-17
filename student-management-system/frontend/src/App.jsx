@@ -3,8 +3,7 @@ import axios from 'axios';
 import './App.css';
 import Login from './Login';
 
-const API_BASE_URL = 'http://localhost:8000/api';
-
+const API_URL = "https://student-management-system-api-1hsh.onrender.com";
 const EMPTY_STUDENT_FORM = {
   username: '',
   password: '',
@@ -42,7 +41,7 @@ function App() {
   const checkLogin = async () => {
     try {
       const response = await axios.get(
-        `${API_BASE_URL}/auth/me/`,
+        `${API_URL}/auth/me/`,
         { withCredentials: true }
       );
 
@@ -68,16 +67,16 @@ function App() {
         marksRes,
         attendanceRes,
       ] = await Promise.all([
-  axios.get(`${API_BASE_URL}/students/`, {
+  axios.get(`${API_URL}/students/`, {
     withCredentials: true,
   }),
-  axios.get(`${API_BASE_URL}/subjects/`, {
+  axios.get(`${API_URL}/subjects/`, {
     withCredentials: true,
   }),
-  axios.get(`${API_BASE_URL}/subjects/marks/`, {
+  axios.get(`${API_URL}/subjects/marks/`, {
     withCredentials: true,
   }),
-  axios.get(`${API_BASE_URL}/attendance/`, {
+  axios.get(`${API_URL}/attendance/`, {
     withCredentials: true,
   }),
 ]);
@@ -152,7 +151,7 @@ function App() {
 
     try {
       const response = await axios.post(
-        `${API_BASE_URL}/students/create/`,
+        `${API_URL}/students/create/`,
         {
           ...studentForm,
           semester: Number(studentForm.semester),
@@ -244,7 +243,7 @@ const handleUpdateStudent = async (event) => {
 
   try {
     const response = await axios.patch(
-      `${API_BASE_URL}/students/${editingStudentId}/update/`,
+      `${API_URL}/students/${editingStudentId}/update/`,
       {
         roll_number: studentForm.roll_number,
         full_name: studentForm.full_name,
@@ -305,7 +304,7 @@ const handleDeleteStudent = async (student) => {
 
   try {
     await axios.delete(
-      `${API_BASE_URL}/students/${student.id}/delete/`,
+      `${API_URL}/students/${student.id}/delete/`,
       {
         withCredentials: true,
         withXSRFToken: true,

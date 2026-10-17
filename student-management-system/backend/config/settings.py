@@ -153,7 +153,7 @@ REST_FRAMEWORK = {
 AUTH_USER_MODEL = 'accounts.User'
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
+    "https://student-management-system-pbql.onrender.com",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -172,4 +172,7 @@ CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+]
+CSRF_TRUSTED_ORIGINS = [
+    "https://student-management-system-pbql.onrender.com",
 ]
