@@ -31,8 +31,8 @@ DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
+    'student-management-system-api-1hsh.onrender.com',
 ]
-
 
 # Application definition
 
