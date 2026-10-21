@@ -41,7 +41,7 @@ function App() {
   const checkLogin = async () => {
     try {
       const response = await axios.get(
-        `${API_URL}/auth/me/`,
+        `${API_URL}/api/auth/me/`,
         { withCredentials: true }
       );
 
@@ -67,16 +67,16 @@ function App() {
         marksRes,
         attendanceRes,
       ] = await Promise.all([
-  axios.get(`${API_URL}/students/`, {
+  axios.get(`${API_URL}/api/students/`, {
     withCredentials: true,
   }),
-  axios.get(`${API_URL}/subjects/`, {
+  axios.get(`${API_URL}/api/subjects/`, {
     withCredentials: true,
   }),
-  axios.get(`${API_URL}/subjects/marks/`, {
+  axios.get(`${API_URL}/api/subjects/marks/`, {
     withCredentials: true,
   }),
-  axios.get(`${API_URL}/attendance/`, {
+  axios.get(`${API_URL}/api/attendance/`, {
     withCredentials: true,
   }),
 ]);
@@ -151,7 +151,7 @@ function App() {
 
     try {
       const response = await axios.post(
-        `${API_URL}/students/create/`,
+        `${API_URL}/api/students/create/`,
         {
           ...studentForm,
           semester: Number(studentForm.semester),
@@ -243,7 +243,7 @@ const handleUpdateStudent = async (event) => {
 
   try {
     const response = await axios.patch(
-      `${API_URL}/students/${editingStudentId}/update/`,
+      `${API_URL}/api/students/${editingStudentId}/update/`,
       {
         roll_number: studentForm.roll_number,
         full_name: studentForm.full_name,
@@ -304,7 +304,7 @@ const handleDeleteStudent = async (student) => {
 
   try {
     await axios.delete(
-      `${API_URL}/students/${student.id}/delete/`,
+      `${API_URL}/api/students/${student.id}/delete/`,
       {
         withCredentials: true,
         withXSRFToken: true,
