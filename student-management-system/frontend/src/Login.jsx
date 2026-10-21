@@ -11,7 +11,7 @@ const [loading, setLoading] = useState(false);
 
 const getCsrfToken = async () => {
 const response = await axios.get(
-`${API_URL}/auth/csrf/`,
+`${API_URL}/api/auth/csrf/`,
 { withCredentials: true }
 );
 
@@ -30,7 +30,7 @@ try {
   const csrfToken = await getCsrfToken();
 
   const response = await axios.post(
-    `${API_URL}/auth/login/`,
+    `${API_URL}/api/auth/login/`,
     { username, password },
     {
       withCredentials: true,
