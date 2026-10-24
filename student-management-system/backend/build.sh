@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -o errexit
 
-python manage.py migrate
+echo "DB URL SET: $([ -n "$DATABASE_URL" ] && echo yes || echo no)"
