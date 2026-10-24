@@ -1,15 +1,18 @@
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from django.contrib.auth import authenticate, login, logout
+from django.db import connection
+from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.middleware.csrf import get_token
+
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
+
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def csrf_token_view(request):
     return Response({'csrfToken': get_token(request)})
+
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -23,16 +26,12 @@ def login_view(request):
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    from django.contrib.auth import get_user_model
-
     User = get_user_model()
     db_user = User.objects.filter(username=username).first()
 
+    print("LOGIN DEBUG - database engine:", connection.settings_dict["ENGINE"])
+    print("LOGIN DEBUG - database name:", connection.settings_dict["NAME"])
     print("LOGIN DEBUG - username found:", db_user is not None)
-    print(
-    "LOGIN DEBUG - password valid:",
-    db_user.check_password(password) if db_user else False
-    )
 
     user = authenticate(request, username=username, password=password)
 
@@ -56,6 +55,7 @@ def logout_view(request):
     logout(request)
     return Response({'message': 'Logged out successfully.'})
 
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def current_user_view(request):
@@ -64,3 +64,4 @@ def current_user_view(request):
         'username': request.user.username,
         'role': request.user.role,
     })
+
