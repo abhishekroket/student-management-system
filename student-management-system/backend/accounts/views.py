@@ -23,6 +23,17 @@ def login_view(request):
             status=status.HTTP_400_BAD_REQUEST
         )
 
+    from django.contrib.auth import get_user_model
+
+    User = get_user_model()
+    db_user = User.objects.filter(username=username).first()
+
+    print("LOGIN DEBUG - username found:", db_user is not None)
+    print(
+    "LOGIN DEBUG - password valid:",
+    db_user.check_password(password) if db_user else False
+    )
+
     user = authenticate(request, username=username, password=password)
 
     if user is None:
