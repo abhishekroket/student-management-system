@@ -142,77 +142,71 @@ function App() {
   };
 
   // Submit a new student to Django.
-  const handleStudentSubmit = async (event) => {
-    event.preventDefault();
+ 
 
-    setFormMessage('');
-    setFormMessageType('');
-    setIsSubmitting(true);
+const handleStudentSubmit = async (event) => {
+  event.preventDefault();
 
-    try {
-      const response = await axios.post(
-        `${API_URL}/api/students/create/`,
-        {
-          ...studentForm,
-          semester: Number(studentForm.semester),
-        },
-        {
-          // Send the Django session cookie if one exists.
-          withCredentials: true,
-          withXSRFToken: true,
-          xsrfCookieName: 'csrftoken',
-          xsrfHeaderName: 'X-CSRFToken',
+  setFormMessage('');
+  setFormMessageType('');
+  setIsSubmitting(true);
 
-        }
-      );
+  try {
+    const csrfResponse = await axios.get(
+      `${API_URL}/api/auth/csrf/`,
+      { withCredentials: true }
+    );
 
-      // Add the newly created student to the existing list.
-      setStudents((previousStudents) => [
-        ...previousStudents,
-        response.data,
-      ]);
+    const csrfToken = csrfResponse.data.csrfToken;
 
-      setStudentForm({ ...EMPTY_STUDENT_FORM });
-      setShowStudentForm(false);
-      setSearchTerm('');
-
-      setFormMessage('Student registered successfully!');
-      setFormMessageType('success');
-    } catch (err) {
-      console.error('Error registering student:', err);
-
-      const status = err.response?.status;
-      const responseData = err.response?.data;
-
-      if (status === 401 || status === 403) {
-        setFormMessage(
-          'Permission denied. Please sign in to Django as a staff user and check the session and CSRF configuration.'
-        );
-      } else if (responseData && typeof responseData === 'object') {
-        const messages = Object.entries(responseData)
-          .map(([field, value]) => {
-            const details = Array.isArray(value)
-              ? value.join(', ')
-              : typeof value === 'string'
-                ? value
-                : JSON.stringify(value);
-
-            return `${field}: ${details}`;
-          })
-          .join(' | ');
-
-        setFormMessage(messages || 'Unable to register student.');
-      } else {
-        setFormMessage(
-          'Could not connect to Django. Check that the backend is running.'
-        );
-      }
-
-      setFormMessageType('error');
-    } finally {
-      setIsSubmitting(false);
+    if (!csrfToken) {
+      throw new Error('Django did not return a CSRF token.');
     }
-  };
+
+    const response = await axios.post(
+      `${API_URL}/api/students/create/`,
+      {
+        ...studentForm,
+        semester: Number(studentForm.semester),
+      },
+      {
+        withCredentials: true,
+        headers: {
+          'X-CSRFToken': csrfToken,
+        },
+      }
+    );
+
+    setStudents((previousStudents) => [
+      ...previousStudents,
+      response.data,
+    ]);
+
+    setStudentForm({ ...EMPTY_STUDENT_FORM });
+    setShowStudentForm(false);
+    setSearchTerm('');
+
+    setFormMessage('Student registered successfully!');
+    setFormMessageType('success');
+  } catch (err) {
+    console.error('Error registering student:', err);
+
+    const responseData = err.response?.data;
+
+    setFormMessage(
+      responseData?.detail ||
+      err.message ||
+      'Unable to register student.'
+    );
+
+    setFormMessageType('error');
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
+
+
 
   // Start editing a student.
 const handleEditStudent = (student) => {
